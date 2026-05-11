@@ -564,7 +564,6 @@ public class DashboardPage {
 
                 card.setAlignment(
                                 javafx.geometry.Pos.TOP_LEFT);
-
                 card.setPrefWidth(180);
 
                 card.setPadding(

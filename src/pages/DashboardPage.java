@@ -1,0 +1,786 @@
+package pages;
+
+import models.Book;
+import components.Sidebar;
+import components.Topbar;
+import data.BookData;
+
+import java.util.ArrayList;
+
+import components.ScrollWrapper;
+import services.ThemeManager;
+import services.SessionManager;
+import services.NavigationManager;
+import services.ReadingProgressService;
+
+import javafx.geometry.Insets;
+
+import javafx.scene.image.ImageView;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class DashboardPage {
+
+        public static void show(Stage stage) {
+                NavigationManager.setCurrentPage(
+                                "dashboard");
+
+                // =========================================
+                // ROOT
+                // =========================================
+
+                BorderPane root = new BorderPane();
+
+                root.setStyle(
+
+                                "-fx-background-color: "
+                                                + ThemeManager.getBackgroundColor()
+                                                + ";");
+
+                // =========================================
+                // SIDEBAR
+                // =========================================
+
+                root.setLeft(
+                                Sidebar.createSidebar(
+                                                stage,
+                                                "dashboard"));
+
+                /// =========================================
+                // DASHBOARD CONTENT
+                // =========================================
+
+                VBox center = new VBox(28);
+
+                center.setFillWidth(true);
+
+                center.setMinHeight(1200);
+
+                center.setPadding(
+                                new Insets(30));
+
+                center.setStyle(
+                                "-fx-background-color:"
+                                                + ThemeManager.getBackgroundColor()
+                                                + ";");
+
+                // =========================================
+                // PAGE TITLE
+                // =========================================
+
+                Label title = new Label(
+                                "Dashboard");
+
+                title.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 36px;" +
+                                                "-fx-font-weight: bold;");
+
+                // =========================================
+                // SUBTITLE
+                // =========================================
+
+                Label subtitle = new Label(
+
+                                "Welcome back, "
+                                                + SessionManager.getCurrentUser()
+                                                + " 👋");
+
+                subtitle.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getSubTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 16px;");
+
+                // =========================================
+                // HEADING BOX
+                // =========================================
+
+                VBox headingBox = new VBox(6);
+
+                headingBox.getChildren().addAll(
+
+                                title,
+                                subtitle);
+
+                // =========================================
+                // STATS ROW
+                // =========================================
+
+                HBox statsRow = new HBox(20);
+
+                // =========================================
+                // CARD 1
+                // =========================================
+
+                VBox card1 = createStatCard(
+                                "1,284",
+                                "Total Books");
+
+                // =========================================
+                // CARD 2
+                // =========================================
+
+                VBox card2 = createStatCard(
+                                "326",
+                                "Books Read");
+
+                // =========================================
+                // CARD 3
+                // =========================================
+
+                VBox card3 = createStatCard(
+                                "92",
+                                "Wishlist");
+
+                // =========================================
+                // CARD 4
+                // =========================================
+
+                VBox card4 = createStatCard(
+                                "4.8",
+                                "Average Rating");
+
+                // =========================================
+                // ADD CARDS
+                // =========================================
+
+                statsRow.getChildren().addAll(
+
+                                card1,
+                                card2,
+                                card3,
+                                card4);
+
+                // =========================================
+                // TRENDING TITLE
+                // =========================================
+
+                Label trendingTitle = new Label(
+                                "Trending Books");
+
+                trendingTitle.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 24px;" +
+                                                "-fx-font-weight: bold;");
+
+                // =========================================
+                // TRENDING ROW
+                // =========================================
+
+                HBox trendingRow = new HBox(20);
+
+                // =========================================
+                // BOOK CARDS
+                // =========================================
+
+                VBox book1 = createBookCard(
+                                "Atomic Habits");
+
+                VBox book2 = createBookCard(
+                                "Sapiens");
+
+                VBox book3 = createBookCard(
+                                "Dune");
+
+                VBox book4 = createBookCard(
+                                "Harry Potter");
+
+                // =========================================
+                // ADD BOOKS
+                // =========================================
+
+                trendingRow.getChildren().addAll(
+
+                                book1,
+                                book2,
+                                book3,
+                                book4);
+
+                /// =========================================
+                // CONTINUE TITLE
+                // =========================================
+
+                Label continueTitle = new Label(
+                                "Continue Reading");
+
+                continueTitle.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 24px;" +
+                                                "-fx-font-weight: bold;");
+
+                // =========================================
+                // CONTINUE ROW
+                // =========================================
+
+                HBox continueRow = new HBox(20);
+
+                // =========================================
+                // CONTINUE SCROLL
+                // =========================================
+
+                ScrollPane continueScroll = new ScrollPane();
+
+                continueScroll.setContent(
+                                continueRow);
+
+                continueScroll.setHbarPolicy(
+                                ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+                continueScroll.setVbarPolicy(
+                                ScrollPane.ScrollBarPolicy.NEVER);
+
+                continueScroll.setFitToHeight(true);
+
+                continueScroll.setPannable(true);
+
+                continueScroll.setStyle(
+
+                                "-fx-background: transparent;" +
+                                                "-fx-background-color: transparent;");
+
+                // =========================================
+                // COMPLETED TITLE
+                // =========================================
+
+                Label completedTitle = new Label(
+                                "Completed Books");
+
+                completedTitle.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+
+                                                "-fx-font-size: 24px;" +
+
+                                                "-fx-font-weight: bold;");
+
+                // =========================================
+                // COMPLETED ROW
+                // =========================================
+
+                HBox completedRow = new HBox(20);
+
+                // =========================================
+                // GET COMPLETED BOOKS
+                // =========================================
+
+                ArrayList<String> completedBooks =
+
+                                ReadingProgressService
+                                                .getCompletedBooks();
+
+                // =========================================
+                // CREATE COMPLETED CARDS
+                // =========================================
+
+                for (String book : completedBooks) {
+
+                        VBox completedCard =
+
+                                        createReadingCard(
+                                                        stage,
+                                                        "✅ " + book,
+                                                        100);
+
+                        completedRow.getChildren()
+                                        .add(completedCard);
+                }
+
+                // =========================================
+                // GET READING BOOKS
+                // =========================================
+
+                ArrayList<String> readingBooks =
+
+                                ReadingProgressService
+                                                .getReadingBooks();
+
+                // =========================================
+                // EMPTY STATE
+                // =========================================
+
+                if (readingBooks.isEmpty()) {
+
+                        VBox emptyCard = createReadingCard(
+                                        stage,
+
+                                        "No books started",
+
+                                        0);
+
+                        continueRow.getChildren()
+                                        .add(emptyCard);
+                }
+
+                // =========================================
+                // CREATE CARDS
+                // =========================================
+
+                else {
+
+                        for (String book : readingBooks) {
+
+                                int progress =
+
+                                                ReadingProgressService
+                                                                .getReadingPercentage(
+                                                                                book);
+
+                                VBox readingCard =
+
+                                                createReadingCard(
+                                                                stage,
+                                                                book,
+                                                                progress);
+
+                                continueRow.getChildren()
+                                                .add(readingCard);
+                        }
+                }
+
+                // =========================================
+                // ADD TO CENTER
+                // =========================================
+
+                center.getChildren().addAll(
+
+                                headingBox,
+
+                                statsRow,
+
+                                trendingTitle,
+
+                                trendingRow,
+
+                                continueTitle,
+
+                                continueScroll,
+
+                                completedTitle,
+
+                                completedRow);
+                // =========================================
+                // MAIN AREA
+                // =========================================
+
+                BorderPane mainArea = new BorderPane();
+
+                mainArea.setTop(
+                                Topbar.createTopbar(stage));
+
+                // =========================================
+                // SCROLL WRAPPER
+                // =========================================
+
+                ScrollWrapper wrapper = new ScrollWrapper(center);
+
+                // =========================================
+                // CENTER
+                // =========================================
+
+                mainArea.setCenter(
+                                wrapper.getPane());
+
+                // =========================================
+                // CENTER
+                // =========================================
+
+                root.setCenter(mainArea);
+
+                // =========================================
+                // SCENE
+                // =========================================
+
+                Scene scene = new Scene(
+                                root,
+                                1500,
+                                900);
+
+                stage.setScene(scene);
+
+                stage.show();
+        }
+
+        // =========================================
+        // STAT CARD
+        // =========================================
+
+        private static VBox createStatCard(
+                        String number,
+                        String text) {
+
+                VBox card = new VBox(10);
+
+                card.setPrefWidth(220);
+
+                card.setPadding(
+                                new Insets(20));
+
+                card.setStyle(
+
+                                "-fx-background-color: "
+                                                + ThemeManager.getCardColor()
+                                                + ";" +
+                                                "-fx-background-radius: 20;");
+
+                Label numberLabel = new Label(number);
+
+                numberLabel.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 30px;" +
+                                                "-fx-font-weight: bold;");
+
+                Label textLabel = new Label(text);
+
+                textLabel.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getSubTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 14px;");
+
+                card.getChildren().addAll(
+
+                                numberLabel,
+                                textLabel);
+
+                return card;
+        }
+
+        // =========================================
+        // BOOK CARD
+        // =========================================
+
+        private static VBox createBookCard(
+                        String titleText) {
+
+                VBox card = new VBox();
+
+                card.setPrefSize(220, 280);
+
+                card.setStyle(
+
+                                "-fx-background-color: "
+                                                + ThemeManager.getCardColor()
+                                                + ";" +
+                                                "-fx-background-radius: 20;");
+
+                // =========================================
+                // IMAGE PLACEHOLDER
+                // =========================================
+
+                VBox imageBox = new VBox();
+
+                imageBox.setPrefHeight(190);
+
+                imageBox.setStyle(
+
+                                "-fx-background-color: #2A2A40;" +
+                                                "-fx-background-radius: 20 20 0 0;");
+
+                // =========================================
+                // DETAILS
+                // =========================================
+
+                VBox details = new VBox(6);
+
+                details.setPadding(
+                                new Insets(16));
+
+                Label title = new Label(titleText);
+
+                title.setWrapText(true);
+
+                title.setMaxWidth(180);
+
+                title.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 16px;" +
+                                                "-fx-font-weight: bold;");
+
+                Label author = new Label(
+                                "Popular Book");
+
+                author.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getSubTextColor()
+                                                + ";");
+
+                details.getChildren().addAll(
+
+                                title,
+                                author);
+
+                // =========================================
+                // ADD TO CARD
+                // =========================================
+
+                card.getChildren().addAll(
+
+                                imageBox,
+
+                                details);
+
+                return card;
+        }
+
+        // =========================================
+        // READING CARD
+        // =========================================
+
+        private static VBox createReadingCard(
+                        Stage stage,
+                        String titleText,
+                        int progress) {
+
+                VBox card = new VBox(14);
+
+                card.setAlignment(
+                                javafx.geometry.Pos.TOP_LEFT);
+
+                card.setPrefWidth(180);
+
+                card.setPadding(
+                                new Insets(20));
+
+                card.setStyle(
+
+                                "-fx-background-color: "
+                                                + ThemeManager.getCardColor()
+                                                + ";" +
+                                                "-fx-background-radius: 20;");
+
+                // =========================================
+                // IMAGE PATH
+                // =========================================
+
+                String imagePath = "";
+
+                // =========================================
+                // FIND IMAGE
+                // =========================================
+
+                for (Book book : BookData.getBooks()) {
+
+                        if (
+
+                        book.getTitle().equals(
+
+                                        titleText.replace("✅ ", ""))
+
+                        ) {
+
+                                imagePath =
+
+                                                "file:src" +
+
+                                                                book.getImage();
+
+                                break;
+                        }
+                }
+
+                // =========================================
+                // BOOK COVER
+                // =========================================
+
+                ImageView cover = new ImageView();
+
+                try {
+
+                        Image image = new Image(
+                                        imagePath);
+
+                        cover.setImage(image);
+
+                } catch (Exception e) {
+
+                        e.printStackTrace();
+                }
+
+                cover.setFitWidth(170);
+
+                cover.setFitHeight(200);
+
+                cover.setPreserveRatio(false);
+
+                VBox.setMargin(
+
+                                cover,
+
+                                new Insets(0, 0, 10, 0));
+
+                // =========================================
+                // TITLE
+                // =========================================
+
+                Label title = new Label(titleText);
+
+                title.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getTextColor()
+                                                + ";" +
+                                                "-fx-font-size: 18px;" +
+                                                "-fx-font-weight: bold;");
+
+                // =========================================
+                // PROGRESS TEXT
+                // =========================================
+
+                Label progressText = new Label(
+                                progress + "% completed");
+
+                progressText.setStyle(
+
+                                "-fx-text-fill: "
+                                                + ThemeManager.getSubTextColor()
+                                                + ";");
+
+                // =========================================
+                // PROGRESS CONTAINER
+                // =========================================
+
+                Region progressBackground = new Region();
+
+                progressBackground.setPrefSize(160, 10);
+
+                progressBackground.setStyle(
+
+                                "-fx-background-color: #2A2A40;" +
+
+                                                "-fx-background-radius: 10;");
+
+                // =========================================
+                // PROGRESS FILL
+                // =========================================
+
+                Region progressFill = new Region();
+
+                progressFill.setPrefHeight(10);
+
+                // =========================================
+                // DYNAMIC WIDTH
+                // =========================================
+
+                double progressWidth =
+
+                                (progress * 160.0) / 100.0;
+
+                progressFill.setPrefWidth(
+                                progressWidth);
+
+                progressFill.setMaxWidth(
+                                progressWidth);
+
+                progressFill.setMinWidth(
+                                progressWidth);
+
+                progressFill.setStyle(
+
+                                "-fx-background-color: #1a7711;" +
+
+                                                "-fx-background-radius: 10;");
+
+                // =========================================
+                // STACK BAR
+                // =========================================
+
+                StackPane progressBar = new StackPane();
+                progressBar.setPrefSize(160, 10);
+
+                progressBar.setMinSize(160, 10);
+
+                progressBar.setMaxSize(160, 10);
+
+                progressBar.setAlignment(
+                                javafx.geometry.Pos.CENTER_LEFT);
+
+                progressBar.getChildren().addAll(
+
+                                progressBackground,
+
+                                progressFill);
+
+                // =========================================
+                // ADD ALL
+                // =========================================
+
+                card.getChildren().addAll(
+
+                                cover,
+
+                                title,
+
+                                progressText,
+
+                                progressBar);
+
+                // =========================================
+                // OPEN BOOK
+                // =========================================
+
+                card.setOnMouseClicked(e -> {
+
+                        String cleanTitle =
+
+                                        titleText.replace("✅ ", "");
+
+                        Book selectedBook = null;
+
+                        // =========================================
+                        // FIND BOOK
+                        // =========================================
+
+                        for (Book book : BookData.getBooks()) {
+
+                                if (book.getTitle().equals(cleanTitle)) {
+
+                                        selectedBook = book;
+                                        break;
+                                }
+                        }
+
+                        // =========================================
+                        // OPEN READER
+                        // =========================================
+
+                        if (selectedBook != null) {
+
+                                ReaderPage.show(
+                                                stage,
+                                                selectedBook);
+                        }
+                });
+
+                return card;
+        }
+
+}
